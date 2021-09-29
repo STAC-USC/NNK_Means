@@ -565,7 +565,9 @@ if (memusage < MEM_HIGH)
 else  % memusage is high
   
   if (codemode == CODE_SPARSITY)
-    Gamma = ompfunc(D'*data,G,thresh,ompparams{:});
+    G_dy = D'*data;
+%     mask = find_knn_mask(G_dy', thresh)';
+    Gamma = ompfunc(G_dy,G,thresh,ompparams{:});
     
   else
     Gamma = ompfunc(D'*data,XtX,G,thresh,ompparams{:});

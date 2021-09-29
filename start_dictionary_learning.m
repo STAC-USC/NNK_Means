@@ -4,4 +4,4 @@ close all;
 
 addpath(pwd);
 addpath("ksvdbox", "OMPbox");
-addpath("utils", "databases", "dictionary_learning_methods");
+addpath("utils", "databases", "dictionary_learning_methods", "LKDL");

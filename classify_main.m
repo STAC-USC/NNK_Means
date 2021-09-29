@@ -56,12 +56,12 @@ for i = 1:length(values)
     results_mat(5,i) = results.classify_t;                       % total test time for entire database
     results_mat(6,i) = results.total_t;                          % total runtime: train_time + test_time + other_time
     
-    results_struct = classify_params;                            % save classification params used in experiment
+%     results_struct = classify_params;                            % save classification params used in experiment
     results_struct.results_mat = results_mat;                    % results_matrix
-    results_struct.train_images = [];                            % deleting train_images (save space)
-    results_struct.test_images = [];                             % deleting train_labels (save space)
-    results_struct.train_labels = [];                            % deleting test_images  (save space)
-    results_struct.test_labels = [];                             % deleting test_labels  (save space)
+%     results_struct.train_images = [];                            % deleting train_images (save space)
+%     results_struct.test_images = [];                             % deleting train_labels (save space)
+%     results_struct.train_labels = [];                            % deleting test_images  (save space)
+%     results_struct.test_labels = [];                             % deleting test_labels  (save space)
     results_struct.class_vec = results.class_vec;                % resulting labels after classification
     results_struct.sp_codes = results.sp_codes;                  % sparse codes of test samples
 end

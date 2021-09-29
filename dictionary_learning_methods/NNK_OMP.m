@@ -15,24 +15,9 @@ for i = 1:n
     g_i = full(G_dy(nodes_i, i)); % node to dictionary similarity
     qp_output = nonnegative_qp_solver(G_i, g_i, reg, g_i);
     qpsol = qp_output.xopt;
+%     qpsol = g_i;
     W(nodes_i, i) = qpsol; %/sum(qpsol);
     error_values(i) = (1 - 2*qpsol'*g_i + qpsol'*G_i*qpsol);
 end
 end
 
-function mask = find_knn_mask(G, k)
-[n, m] = size(G);
-if k < m
-    mask = G;
-    for it = 1:n
-        % sort points according to similarities: 
-        [~, order] = sort(G(it,:), 'descend'); 
-
-        % for all points which are not among the k nearest neighbors, set mask to 0: 
-        mask(it, order(k+1:end)) = 0;
-        mask(it, order(1:k)) = 1; %unweighted! 
-    end
-else
-    mask = G > 0;
-end
-end

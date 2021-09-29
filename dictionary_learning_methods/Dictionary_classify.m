@@ -46,7 +46,11 @@ for i = 1:num_classes
     end
     switch alg_type
         case 'KSVD'
-            X{i} = omp(dic_cell{i}'*test, dic_cell{i}'*dic_cell{i}, card);
+            dict_test_similarity = dic_cell{i}'*test;
+            dict_dict_similarity = dic_cell{i}'*dic_cell{i};
+%             mask = find_knn_mask(dict_test_similarity', card)';
+
+            X{i} = omp(dict_test_similarity, dict_dict_similarity, card);
             res(i,:) = sqrt(sum((test - dic_cell{i}*X{i}).^2));
         case 'KMeans'
             X1_sum = sum(dic_cell{i}.^2,2);
@@ -75,4 +79,4 @@ diff = sum(abs(classify_results - classify_params.test_labels));
 accuracy = sum(diff==0)/length(diff);
 % disp([classify_params.alg_type,': ',num2str(accuracy)]);
 classify_t = toc(classify_tic);    %% classifcation time
-sp_codes = 0;
+sp_codes = length(find(cat(2, X{:})))/(num_classes*size(test,2)); % Average sparsity of representation in each class for all test examples

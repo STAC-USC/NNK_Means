@@ -2,7 +2,7 @@ function[out] = nonnegative_qp_solver(A, b, inner_tol, x_init)
 
 % initialization
 n = size(A, 1);
-AtA = A;%+1e-12*eye(n);
+AtA = A;% + inner_tol*eye(n);
 Atb = b;
 
 maxiter = 50*n;
