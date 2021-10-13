@@ -27,7 +27,7 @@ sig_dim        = size(train_cell{1},1);
 dic_cell       = cell(1,num_classes);
 
 switch alg_type
-    case {'KSVD','KMeans'}
+    case {'kSVD','kMeans'}
         switch init_dic
             case 'random' % entirely random elements
                 for i = 1:num_classes
@@ -50,7 +50,7 @@ switch alg_type
                     dic_cell{i} = dic_cell{i}.*repmat(1./sqrt(sum(dic_cell{i}.*dic_cell{i})),[sig_dim,1]);
                 end
         end
-    case {'KKSVD', 'Kernel-KMeans', 'NNK'}
+    case {'Kernel-kSVD', 'Kernel-kMeans', 'NNK-Means'}
         switch init_dic
             case 'random'
                 for i = 1:num_classes

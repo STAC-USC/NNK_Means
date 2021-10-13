@@ -1,9 +1,7 @@
-function [train_cell,K_YY_cell,test_images,dic_cell,train_t] = Dictionary_train(classify_params)
+function [train_cell,K_YY_cell,dic_cell,train_t] = Dictionary_train(classify_params)
 
 % ========================================================================
-% Author: Alona Golts (zadneprovski@gmail.com)
-% Date: 05-04-2016
-%
+% Modified code from LKDL
 % INPUT:
 % classify_params - struct containing all parameters for classification.
 %
@@ -16,8 +14,8 @@ function [train_cell,K_YY_cell,test_images,dic_cell,train_t] = Dictionary_train(
 
 % Parameters in classify_params
 train_images          = classify_params.train_images;      % training examples
-test_images           = classify_params.test_images;       % training labels
-test_labels           = classify_params.test_labels;       % test examples
+% test_images           = classify_params.test_images;       % training labels
+% test_labels           = classify_params.test_labels;       % test examples
 train_labels          = classify_params.train_labels;      % test labels
 num_classes           = classify_params.num_classes;       % number of classes in database
 alg_type              = classify_params.alg_type;          % algortihm: 'KSVD','KKSVD'
@@ -33,9 +31,9 @@ train_cell = cell(1,num_classes);
 K_YY_cell = cell(1,num_classes);
 
 switch alg_type
-    case {'KSVD', 'KMeans'}
+    case {'kSVD', 'kMeans'}
         kernel_method = false;
-    case {'KKSVD', 'NNK', 'Kernel-KMeans'} % 
+    case {'Kernel-kSVD', 'NNK-Means', 'Kernel-kMeans'} % 
         kernel_method = true;
 end
 
@@ -69,18 +67,22 @@ for i = 1:num_classes
     params.kervar2 = ker_param_1;
 
     switch alg_type
-        case 'KSVD'
+        case 'kSVD'
             [dic_cell{i}, W] = ksvd(params);
-        case 'KMeans'
+        case 'kMeans'
             [dic_cell{i}, W] = KMeans(params);
-        case 'Kernel-KMeans'
+        case 'Kernel-kMeans'
             [dic_cell{i}, W] = Kernel_KMeans(params);
-        case 'KKSVD'
+        case 'Kernel-kSVD'
             [dic_cell{i},W] = KKSVD(params);
-        case 'NNK'
+        case 'NNK-Means'
             [dic_cell{i},W] = NNK_Means(params);
     end
     waitbar(i/num_classes);
 end
 close(h);
 train_t = toc(train_tic);
+end
+
+% dic_cell = train_cell;
+% train_t = 0;

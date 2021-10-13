@@ -2,32 +2,52 @@
 
 %% load database
 clc; clear; close all;
-dataset =  'USPS'; %'simulated_data'; % 'MNIST'; %
+dataset = 'USPS'; % 'cifar10'; % 'MNIST'; %  'simulated_data'; %  
 load(dataset);
+
+
+% %% DICTOL code
+% dataset = 'myYaleB';
+% % dataset = 'myAR';
+% N_train = 30;        
+% [dataset, train_img, test_img, train_lbl, test_lbl] = train_test_split(...
+%     dataset, N_train);
+% classes = 1:max(test_lbl);
+% train_lbl = double(train_lbl' == classes)';
+% test_lbl = double(test_lbl' == classes)';
+% % train_lbl = label_to_range(train_lbl);
+% % test_lbl = label_to_range(test_lbl);
+
+%%
 results_folder = ['results/', dataset, '/'];
 dir_result = mkdir(results_folder);
-train_size = size(train_lbl,2);
-
+train_size = size(train_img,2);
+num_classes = size(train_lbl,1);
 %% define all paramters - defaults
 classify_params.run_mode = 'regular';
 classify_params.pre_process = 'mean_std'; %'none'; %
-classify_params.train_images = train_img;
-classify_params.train_labels = train_lbl;
-classify_params.test_images = test_img;
-classify_params.test_labels = test_lbl;
-classify_params.num_classes = 10; % 4;%
+classify_params.train_images = double(train_img);
+classify_params.train_labels = double(train_lbl);
+classify_params.test_images = double(test_img);
+classify_params.test_labels = double(test_lbl);
+classify_params.num_classes = num_classes;
 classify_params.alg_type = 'KSVD';
 
-classify_params.num_runs = 10;
-classify_params.train_per_class = 0;
-classify_params.test_per_class = 0;
-classify_params.num_atoms = 10;
+% classify_params.train_per_class = 0;
+% classify_params.test_per_class = 0;
+classify_params.train_size = train_size; % round(0.2*train_size); % 
+classify_params.num_atoms = 50; %50; % 15; %
+classify_params.num_runs = 1; % 1;%
 classify_params.iter = 10; % Number of iterations to run a learning method
-classify_params.card = 30; % Max. allowed sparsity of dictionary sparse coding
+classify_params.card =  30; %30; %  % Max. allowed sparsity of dictionary sparse coding
 
 classify_params.ker_type = 'Gaussian';
 classify_params.ker_param_1 = 1;
 classify_params.ker_param_2 = 0;
+
+% classify_params.ker_type = 'Polynomial';
+% classify_params.ker_param_1 = 2;
+% classify_params.ker_param_2 = 0;
 
 % Parameters for adding noise or removing pixels in the input dataset
 classify_params.sigma = 0;
@@ -36,12 +56,16 @@ classify_params.missing_pixels = 0;
 classify_params.init_dic = 'partial';
 
 %% Check classification accuracy for different parameter variation
-% goal = 'check_visualization';
-% range = [10];
+goal = 'check_classification';
+range = [classify_params.card];
 
-goal = 'check_noise_sigma';
-range = 0:0.2:2 ;
-x_label_name = 'Noise sigma';
+% goal = 'check_noise_sigma';
+% range = 0:0.5:2 ;
+% x_label_name = 'Noise level';
+
+% goal = 'check_missing_pixels';
+% range = 0:0.2:0.9;
+% x_label_name = '% Missing pixels';
 
 % goal = 'check_num_atoms';
 % range = [50 100 200];
@@ -57,7 +81,7 @@ x_label_name = 'Noise sigma';
 
 
 %% Algotithms
-alg_types = {'KMeans', 'Kernel-KMeans', 'KSVD',  'KKSVD', 'NNK'}; % 'KKSVD'  'LKDL'
+alg_types = {'kMeans', 'Kernel-kMeans', 'kSVD', 'Kernel-kSVD', 'NNK-Means'}; % 'KKSVD'  'LKDL'
 n_methods = length(alg_types);
 output_struct = classify_params;
 output_struct.alg_type = alg_types;
@@ -91,19 +115,19 @@ plot_specs = {'x-', '<-',  '^-',  '>-', 'o-','+-','*-', 's-'};
 figure
 hold on;  grid on;
 
-%% show graphs
+% show graphs
 % load fname
-y_label_name = 'Test Accuracy (%)';
-index = 2;
+% y_label_name = 'Test Accuracy (%)';
+% index = 2;
 % yticks(0.92:0.01:0.97);
 % ylim([0.92, 0.97]);
 
 % y_label_name = 'Train Time (sec)';
 % index = 4;
 
-% y_label_name = 'Test Time (sec)';
-% index = 5;
-%% Plot for check case
+y_label_name = 'Test Time (sec)';
+index = 5;
+% Plot for check case
 
 for ii = 1:n_methods
     results = output_struct.results{ii}.results_mat;
@@ -119,8 +143,8 @@ xlim([min(range),max(range)]);
 set(gca,'XTick',range);
 
 legend('show'); legend('boxoff') 
-legend('Location', 'Best', 'FontName','Times New Roman');
-set(gca, 'FontSize', 14);
+legend('Location', 'Best', 'FontName','Times New Roman', 'FontSize', 20);
+% set(gca, 'FontSize', 14);
 
 %% Visualization plot
 % for ii = 1:n_methods
