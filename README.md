@@ -1,4 +1,4 @@
-# NNK_Means
+# NNK Means
 MATLAB source code for NNK-Means: Dictionary learning using Non-Negatigve Kernel Regression (submitted for review)
 
 >Abstract
