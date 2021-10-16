@@ -1,6 +1,6 @@
 function results_struct = classify_main(classify_params,parameter,values)
 % ========================================================================
-% Modified code from LKDL by Alona Golts (zadneprovski@gmail.com)
+% Modified code from LKDL 
 % ========================================================================
 % 
 % INPUT:

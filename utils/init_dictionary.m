@@ -1,8 +1,7 @@
 function dic_cell = init_dictionary(classify_params,train_cell)
 
 % ========================================================================
-% Author: Alona Golts (zadneprovski@gmail.com)
-% Date: 05-04-2016
+% Modified code from LKDL
 % 
 % Initialize dictionary before performing dictionary learning
 %

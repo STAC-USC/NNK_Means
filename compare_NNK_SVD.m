@@ -5,19 +5,6 @@ clc; clear; close all;
 dataset = 'USPS'; % 'cifar10'; % 'MNIST'; %  'simulated_data'; %  
 load(dataset);
 
-
-% %% DICTOL code
-% dataset = 'myYaleB';
-% % dataset = 'myAR';
-% N_train = 30;        
-% [dataset, train_img, test_img, train_lbl, test_lbl] = train_test_split(...
-%     dataset, N_train);
-% classes = 1:max(test_lbl);
-% train_lbl = double(train_lbl' == classes)';
-% test_lbl = double(test_lbl' == classes)';
-% % train_lbl = label_to_range(train_lbl);
-% % test_lbl = label_to_range(test_lbl);
-
 %%
 results_folder = ['results/', dataset, '/'];
 dir_result = mkdir(results_folder);
@@ -33,21 +20,15 @@ classify_params.test_labels = double(test_lbl);
 classify_params.num_classes = num_classes;
 classify_params.alg_type = 'KSVD';
 
-% classify_params.train_per_class = 0;
-% classify_params.test_per_class = 0;
 classify_params.train_size = train_size; % round(0.2*train_size); % 
-classify_params.num_atoms = 50; %50; % 15; %
+classify_params.num_atoms = 50; % 15; %
 classify_params.num_runs = 1; % 1;%
 classify_params.iter = 10; % Number of iterations to run a learning method
-classify_params.card =  30; %30; %  % Max. allowed sparsity of dictionary sparse coding
+classify_params.card =  30; % 5; %  % Max. allowed sparsity of dictionary sparse coding
 
 classify_params.ker_type = 'Gaussian';
 classify_params.ker_param_1 = 1;
 classify_params.ker_param_2 = 0;
-
-% classify_params.ker_type = 'Polynomial';
-% classify_params.ker_param_1 = 2;
-% classify_params.ker_param_2 = 0;
 
 % Parameters for adding noise or removing pixels in the input dataset
 classify_params.sigma = 0;
@@ -81,7 +62,7 @@ range = [classify_params.card];
 
 
 %% Algotithms
-alg_types = {'kMeans', 'Kernel-kMeans', 'kSVD', 'Kernel-kSVD', 'NNK-Means'}; % 'KKSVD'  'LKDL'
+alg_types = {'kMeans', 'Kernel-kMeans', 'kSVD', 'Kernel-kSVD', 'NNK-Means'};
 n_methods = length(alg_types);
 output_struct = classify_params;
 output_struct.alg_type = alg_types;
